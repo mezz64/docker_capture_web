@@ -42,13 +42,8 @@ def main():
     refresh_delay = sys.argv[6]
     log_level = sys.argv[7]
 
-    if window_size:
-        window_size = [int(x) for x in window_size.split("x")]
-    else:
-        window_size = (1200, 800)
+    window_size = [int(x) for x in window_size.split("x")]
 
-    if not log_level:
-        log_level = CRITICAL
     basicConfig(level=log_level, format='%(asctime)s@%(name)s %(levelname)s # %(message)s')
 
     capture_simple_screenshot(url, filename, window_size=window_size)

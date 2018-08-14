@@ -4,11 +4,10 @@ MAINTAINER jtmihalic@gmail.com
 WORKDIR /tmp
 
 RUN sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' && \
-    wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
-    apt-get update && \
-    apt-get install -y google-chrome-stable
+    wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
 
-RUN apt-get install -y unzip && \
+RUN apt-get update && \
+    apt-get install -y google-chrome-stable unzip nginx && \
     curl -LO https://chromedriver.storage.googleapis.com/2.41/chromedriver_linux64.zip && \
     unzip chromedriver_linux64.zip && \
     mv chromedriver /usr/local/bin/

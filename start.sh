@@ -20,6 +20,6 @@ printf "\n \n \n ------------------------Starting container --------------------
 
 
 # Start program
-python screenshot.py $URL $FILENAME $WINDOW_SIZE $USER_AGENT $WAIT_TIME $REFRESH_DELAY $LOG_LEVEL
+python /tmp/screenshot.py $URL $FILENAME $WINDOW_SIZE $USER_AGENT $WAIT_TIME $REFRESH_DELAY $LOG_LEVEL
 
 echo "Stopping Container.."

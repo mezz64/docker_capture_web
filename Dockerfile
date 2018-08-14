@@ -9,7 +9,7 @@ RUN sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc
     apt-get install -y google-chrome-stable
 
 RUN apt-get install -y unzip && \
-    curl -LO https://chromedriver.storage.googleapis.com/2.37/chromedriver_linux64.zip && \
+    curl -LO https://chromedriver.storage.googleapis.com/2.41/chromedriver_linux64.zip && \
     unzip chromedriver_linux64.zip && \
     mv chromedriver /usr/local/bin/
 
@@ -33,4 +33,4 @@ RUN chmod +x /tmp/start.sh
 #ENTRYPOINT ["python", "/tmp/screenshot.py"]
 #CMD ["--help"]
 
-ENTRYPOINT ["/start.sh"]
+ENTRYPOINT ["/tmp/start.sh"]

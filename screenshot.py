@@ -43,7 +43,7 @@ def main():
     log_level = sys.argv[7]
 
     if window_size:
-        window_size = [int(x) for x in args.window_size.split("x")]
+        window_size = [int(x) for x in window_size.split("x")]
     else:
         window_size = (1200, 800)
 

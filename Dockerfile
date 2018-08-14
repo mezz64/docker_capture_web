@@ -1,6 +1,12 @@
 FROM python:3.6
 MAINTAINER jtmihalic@gmail.com
 
+ENV WINDOW_SIZE
+ENV USER_AGENT
+ENV WAIT_TIME
+ENV REFRESH_DELAY
+ENV LOG_LEVEL
+
 WORKDIR /tmp
 
 RUN sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' && \

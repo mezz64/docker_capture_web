@@ -28,7 +28,7 @@ ADD screenshot.py /tmp/
 ADD start.sh /tmp/
 RUN chmod +x /tmp/start.sh
 
-VOLUME ["/tmp"]
+#VOLUME ["/tmp"]
 
 #ENTRYPOINT ["python", "/tmp/screenshot.py"]
 #CMD ["--help"]

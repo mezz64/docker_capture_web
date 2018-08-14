@@ -74,8 +74,11 @@ def main():
 def capture_simple_screenshot(url, filename, window_size=None):
     """Capture simple screen shot using built-in function """
     options = webdriver.ChromeOptions()
-    options.add_argument('--ignore-certificate-errors')
-    options.add_argument("--test-type")
+    # options.add_argument('--ignore-certificate-errors')
+    # options.add_argument("--test-type")
+    options.add_argument('--headless')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
     # options.binary_location = "/usr/bin/chromium"
     driver = webdriver.Chrome(chrome_options=options)
 

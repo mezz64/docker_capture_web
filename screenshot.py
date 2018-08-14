@@ -46,7 +46,7 @@ def main():
 
     basicConfig(level=log_level, format='%(asctime)s@%(name)s %(levelname)s # %(message)s')
 
-    capture_simple_screenshot(url, filename, window_size=window_size)
+    capture_simple_screenshot(url, filename, window_size=window_size, wait=wait_time)
 
     # capture_full_screenshot(url, filename, window_size=window_size, user_agent=user_agent,
     #                         wait=wait_time)
@@ -71,7 +71,7 @@ def main():
 #     capture_full_screenshot(args.url, args.filename, window_size=window_size, user_agent=args.user_agent,
 #                             wait=args.wait)
 
-def capture_simple_screenshot(url, filename, window_size=None):
+def capture_simple_screenshot(url, filename, window_size=None, wait=None):
     """Capture simple screen shot using built-in function """
     options = webdriver.ChromeOptions()
     # options.add_argument('--ignore-certificate-errors')
@@ -86,6 +86,7 @@ def capture_simple_screenshot(url, filename, window_size=None):
         driver.set_window_size(window_size[0], window_size[1])
 
     driver.get(url)
+    sleep(wait or 0.2)
     driver.save_screenshot(filename)
 
     client_info = get_client_info(driver)

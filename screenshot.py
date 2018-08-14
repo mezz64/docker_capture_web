@@ -38,8 +38,8 @@ def main():
     filename = sys.argv[2]
     window_size = sys.argv[3]
     user_agent = sys.argv[4]
-    wait_time = sys.argv[5]
-    refresh_delay = sys.argv[6]
+    wait_time = int(sys.argv[5])
+    refresh_delay = int(sys.argv[6])
     log_level = sys.argv[7]
 
     window_size = [int(x) for x in window_size.split("x")]

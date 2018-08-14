@@ -1,5 +1,5 @@
-FROM python:3.6.4
-MAINTAINER mokemokechicken@gmail.com
+FROM python:3.6
+MAINTAINER jtmihalic@gmail.com
 
 WORKDIR /tmp
 
@@ -13,9 +13,9 @@ RUN apt-get install -y unzip && \
     unzip chromedriver_linux64.zip && \
     mv chromedriver /usr/local/bin/
 
-RUN apt-get -y install fonts-ipafont-gothic fonts-ipafont-mincho
-ENV LANG=ja_JP.UTF-8
-ENV LANGUAGE="ja_JP:ja"
+#RUN apt-get -y install fonts-ipafont-gothic fonts-ipafont-mincho
+#ENV LANG=ja_JP.UTF-8
+#ENV LANGUAGE="ja_JP:ja"
 
 ADD requirements.txt /tmp/
 RUN pip install -r requirements.txt
@@ -24,5 +24,13 @@ RUN mkdir -p /tmp/screenshot
 WORKDIR /tmp/screenshot
 ADD screenshot.py /tmp/
 
-ENTRYPOINT ["python", "/tmp/screenshot.py"]
-CMD ["--help"]
+#Add start script
+ADD start.sh /tmp/
+RUN chmod +x /tmp/start.sh
+
+VOLUME ["/tmp"]
+
+#ENTRYPOINT ["python", "/tmp/screenshot.py"]
+#CMD ["--help"]
+
+ENTRYPOINT ["/start.sh"]

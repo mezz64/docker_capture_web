@@ -4,7 +4,7 @@ Thanks
 https://github.com/mrcoles/full-page-screen-capture-chrome-extension/blob/master/page.js
 """
 
-from argparse import ArgumentParser
+# from argparse import ArgumentParser
 from collections import namedtuple
 from io import BytesIO
 from logging import getLogger, basicConfig, DEBUG, INFO, CRITICAL
@@ -17,36 +17,81 @@ ClientInfo = namedtuple("ClientInfo", "full_width full_height window_width windo
 logger = getLogger(__name__)
 
 
-def args_parser():
-    parser = ArgumentParser()
-    parser.add_argument('url', help='specify URL')
-    parser.add_argument('filename', help='specify capture image filename')
-    parser.add_argument('-w', help="specify window size like 1200x800", dest="window_size", type=str)
-    parser.add_argument('--ua', help="specify user-agent", dest="user_agent", type=str)
-    parser.add_argument('--wait', help="specify wait seconds after scroll", dest="wait", type=float, default=0.2)
-    parser.add_argument('-v', help="set LogLevel to INFO", dest="log_info", action="store_true")
-    parser.add_argument('--vv', help="set LogLevel to DEBUG", dest="log_debug", action="store_true")
-    return parser
+# def args_parser():
+#     parser = ArgumentParser()
+#     parser.add_argument('url', help='specify URL')
+#     parser.add_argument('filename', help='specify capture image filename')
+#     parser.add_argument('-w', help="specify window size like 1200x800", dest="window_size", type=str)
+#     parser.add_argument('--ua', help="specify user-agent", dest="user_agent", type=str)
+#     parser.add_argument('--wait', help="specify wait seconds after scroll", dest="wait", type=float, default=0.2)
+#     parser.add_argument('-v', help="set LogLevel to INFO", dest="log_info", action="store_true")
+#     parser.add_argument('--vv', help="set LogLevel to DEBUG", dest="log_debug", action="store_true")
+#     return parser
 
 
 def main():
-    parser = args_parser()
-    args = parser.parse_args()
-    if args.window_size:
+    """Main function."""
+    url = sys.argv[1]
+    filename = sys.argv[2]
+    window_size = sys.argv[3]
+    user_agent = sys.argv[4]
+    wait_time = sys.argv[5]
+    refresh_delay = sys.argv[6]
+    log_level = sys.argv[7]
+
+    if window_size:
         window_size = [int(x) for x in args.window_size.split("x")]
     else:
         window_size = (1200, 800)
 
-    if args.log_info:
-        log_level = INFO
-    elif args.log_debug:
-        log_level = DEBUG
-    else:
+    if not log_level:
         log_level = CRITICAL
     basicConfig(level=log_level, format='%(asctime)s@%(name)s %(levelname)s # %(message)s')
 
-    capture_full_screenshot(args.url, args.filename, window_size=window_size, user_agent=args.user_agent,
-                            wait=args.wait)
+    capture_simple_screenshot(url, filename, window_size=window_size)
+
+    # capture_full_screenshot(url, filename, window_size=window_size, user_agent=user_agent,
+    #                         wait=wait_time)
+
+
+# def main():
+#     parser = args_parser()
+#     args = parser.parse_args()
+#     if args.window_size:
+#         window_size = [int(x) for x in args.window_size.split("x")]
+#     else:
+#         window_size = (1200, 800)
+
+#     if args.log_info:
+#         log_level = INFO
+#     elif args.log_debug:
+#         log_level = DEBUG
+#     else:
+#         log_level = CRITICAL
+#     basicConfig(level=log_level, format='%(asctime)s@%(name)s %(levelname)s # %(message)s')
+
+#     capture_full_screenshot(args.url, args.filename, window_size=window_size, user_agent=args.user_agent,
+#                             wait=args.wait)
+
+def capture_simple_screenshot(url, filename, window_size=None):
+    """Capture simple screen shot using built-in function """
+    options = webdriver.ChromeOptions()
+    options.add_argument('--ignore-certificate-errors')
+    options.add_argument("--test-type")
+    # options.binary_location = "/usr/bin/chromium"
+    driver = webdriver.Chrome(chrome_options=options)
+
+    if window_size:
+        driver.set_window_size(window_size[0], window_size[1])
+
+    driver.get(url)
+    driver.save_screenshot(filename)
+
+    client_info = get_client_info(driver)
+    # ua = driver.execute_script("return navigator.userAgent")
+    logger.info(client_info)
+
+    driver.close()
 
 
 def capture_full_screenshot(url, filename, window_size=None, user_agent=None, wait=None):

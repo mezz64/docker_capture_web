@@ -52,6 +52,6 @@ LOG_LEVEL="${LOG_LEVEL}"
 fi
 
 # Start program
-python /tmp/screenshot.py $URL $FILENAME WINDOW_SIZE USER_AGENT WAIT_TIME $REFRESH_DELAY LOG_LEVEL
+python /tmp/screenshot.py $URL $FILENAME $WINDOW_SIZE $USER_AGENT $WAIT_TIME $REFRESH_DELAY $LOG_LEVEL
 
 echo "Stopping Container.."

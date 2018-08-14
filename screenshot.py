@@ -4,6 +4,9 @@ Thanks
 https://github.com/mrcoles/full-page-screen-capture-chrome-extension/blob/master/page.js
 """
 
+import os
+import sys
+
 # from argparse import ArgumentParser
 from collections import namedtuple
 from io import BytesIO

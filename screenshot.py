@@ -82,11 +82,11 @@ def add_timestamp(input_file, output_file):
     im = Image.open(input_file)
     #myfont = ImageFont.truetype(fontFile, fontSize)
     myfont = ImageFont.load_default()
-    topLeftWidth = int(im.size[0] - (im.size[0] / topLeftWidthDivider))
-    topLeftHeight = int(im.size[1] - (im.size[1] / topLeftHeightDivider))
+    topLeftWidth = int(im.width - (im.width / topLeftWidthDivider))
+    topLeftHeight = int(im.height - (im.height / topLeftHeightDivider))
     draw = ImageDraw.Draw(im)
-    draw.rectangle([topLeftWidth, topLeftHeight, im.size[0], im.size[1]], fill="black")
-    draw.text([topLeftWidth + textPadding, topLeftHeight + textPadding], timeInfo, fill="white", font=myfont)
+    draw.rectangle([0, im.height, im.width/2, im.height-10], fill="black")
+    draw.text([0 + textPadding, 0 + textPadding], timeInfo, fill="white", font=myfont)
     del draw
 
     #write image

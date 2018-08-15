@@ -60,9 +60,9 @@ def capture_simple_screenshot(url, filename, window_size=None, wait=None):
 
     driver.get(url)
     time.sleep(wait or 0.2)
-    driver.save_screenshot('temp.png')
+    driver.save_screenshot('weather_notime.png')
 
-    add_timestamp('temp.png', filename)
+    add_timestamp('weather_notime.png', filename)
 
     client_info = get_client_info(driver)
     # ua = driver.execute_script("return navigator.userAgent")
@@ -85,8 +85,8 @@ def add_timestamp(input_file, output_file):
     topLeftWidth = int(im.width - (im.width / topLeftWidthDivider))
     topLeftHeight = int(im.height - (im.height / topLeftHeightDivider))
     draw = ImageDraw.Draw(im)
-    draw.rectangle([0, im.height, im.width/2, im.height-10], fill="black")
-    draw.text([0 + textPadding, 0 + textPadding], timeInfo, fill="white", font=myfont)
+    # draw.rectangle([0, im.height, im.width/2, im.height-10], fill="black")
+    draw.text([0 + textPadding, 0 + textPadding], timeInfo, fill="black", font=myfont)
     del draw
 
     #write image

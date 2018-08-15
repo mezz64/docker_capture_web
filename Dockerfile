@@ -1,26 +1,16 @@
 FROM python:3.6
 MAINTAINER jtmihalic@gmail.com
 
-#ENV WINDOW_SIZE
-#ENV USER_AGENT
-#ENV WAIT_TIME
-#ENV REFRESH_DELAY
-#ENV LOG_LEVEL
-
 WORKDIR /tmp
 
 RUN sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' && \
     wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
 
 RUN apt-get update && \
-    apt-get install -y google-chrome-stable unzip nginx && \
+    apt-get install -y google-chrome-stable unzip && \
     curl -LO https://chromedriver.storage.googleapis.com/2.41/chromedriver_linux64.zip && \
     unzip chromedriver_linux64.zip && \
     mv chromedriver /usr/local/bin/
-
-#RUN apt-get -y install fonts-ipafont-gothic fonts-ipafont-mincho
-#ENV LANG=ja_JP.UTF-8
-#ENV LANGUAGE="ja_JP:ja"
 
 ADD requirements.txt /tmp/
 RUN pip install -r requirements.txt
@@ -32,10 +22,5 @@ ADD screenshot.py /tmp/
 #Add start script
 ADD start.sh /tmp/
 RUN chmod +x /tmp/start.sh
-
-#VOLUME ["/tmp"]
-
-#ENTRYPOINT ["python", "/tmp/screenshot.py"]
-#CMD ["--help"]
 
 ENTRYPOINT ["/tmp/start.sh"]

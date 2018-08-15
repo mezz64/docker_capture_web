@@ -6,30 +6,16 @@ https://github.com/mrcoles/full-page-screen-capture-chrome-extension/blob/master
 
 import os
 import sys
-
-# from argparse import ArgumentParser
+import time
 from collections import namedtuple
 from io import BytesIO
 from logging import getLogger, basicConfig, DEBUG, INFO, CRITICAL
-from time import sleep
 
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 from selenium import webdriver
 
 ClientInfo = namedtuple("ClientInfo", "full_width full_height window_width window_height")
 logger = getLogger(__name__)
-
-
-# def args_parser():
-#     parser = ArgumentParser()
-#     parser.add_argument('url', help='specify URL')
-#     parser.add_argument('filename', help='specify capture image filename')
-#     parser.add_argument('-w', help="specify window size like 1200x800", dest="window_size", type=str)
-#     parser.add_argument('--ua', help="specify user-agent", dest="user_agent", type=str)
-#     parser.add_argument('--wait', help="specify wait seconds after scroll", dest="wait", type=float, default=0.2)
-#     parser.add_argument('-v', help="set LogLevel to INFO", dest="log_info", action="store_true")
-#     parser.add_argument('--vv', help="set LogLevel to DEBUG", dest="log_debug", action="store_true")
-#     return parser
 
 
 def main():
@@ -46,30 +32,17 @@ def main():
 
     basicConfig(level=log_level, format='%(asctime)s@%(name)s %(levelname)s # %(message)s')
 
-    capture_simple_screenshot(url, filename, window_size=window_size, wait=wait_time)
+    while True:
+        try:
+            capture_simple_screenshot(url, filename, window_size=window_size, wait=wait_time)
+        except:
+            continue
+
+        time.sleep(refresh_delay)
 
     # capture_full_screenshot(url, filename, window_size=window_size, user_agent=user_agent,
     #                         wait=wait_time)
 
-
-# def main():
-#     parser = args_parser()
-#     args = parser.parse_args()
-#     if args.window_size:
-#         window_size = [int(x) for x in args.window_size.split("x")]
-#     else:
-#         window_size = (1200, 800)
-
-#     if args.log_info:
-#         log_level = INFO
-#     elif args.log_debug:
-#         log_level = DEBUG
-#     else:
-#         log_level = CRITICAL
-#     basicConfig(level=log_level, format='%(asctime)s@%(name)s %(levelname)s # %(message)s')
-
-#     capture_full_screenshot(args.url, args.filename, window_size=window_size, user_agent=args.user_agent,
-#                             wait=args.wait)
 
 def capture_simple_screenshot(url, filename, window_size=None, wait=None):
     """Capture simple screen shot using built-in function """
@@ -86,14 +59,38 @@ def capture_simple_screenshot(url, filename, window_size=None, wait=None):
         driver.set_window_size(window_size[0], window_size[1])
 
     driver.get(url)
-    sleep(wait or 0.2)
-    driver.save_screenshot(filename)
+    time.sleep(wait or 0.2)
+    driver.save_screenshot('temp.png')
+
+    add_timestamp('temp.png', filename)
 
     client_info = get_client_info(driver)
     # ua = driver.execute_script("return navigator.userAgent")
     logger.info(client_info)
 
     driver.close()
+
+def add_timestamp(input_file, output_file):
+    """ Print timestamp on image. """
+    fontSize = 5
+    topLeftWidthDivider = 5 # increase to make the textbox shorter in width
+    topLeftHeightDivider = 23 # increase to make the textbox shorter in height
+    textPadding = 2
+
+    timeInfo = time.strftime("%m/%d - %H:%M:%S")
+
+    im = Image.open(input_file)
+    #myfont = ImageFont.truetype(fontFile, fontSize)
+    myfont = ImageFont.load_default()
+    topLeftWidth = int(im.size[0] - (im.size[0] / topLeftWidthDivider))
+    topLeftHeight = int(im.size[1] - (im.size[1] / topLeftHeightDivider))
+    draw = ImageDraw.Draw(im)
+    draw.rectangle([topLeftWidth, topLeftHeight, im.size[0], im.size[1]], fill="black")
+    draw.text([topLeftWidth + textPadding, topLeftHeight + textPadding], timeInfo, fill="white", font=myfont)
+    del draw
+
+    #write image
+    im.save(output_file, 'PNG')
 
 
 def capture_full_screenshot(url, filename, window_size=None, user_agent=None, wait=None):
@@ -130,7 +127,7 @@ def capture_full_screenshot(url, filename, window_size=None, user_agent=None, wa
 def capture_screen_area(driver: webdriver.Chrome, filename, client_info: ClientInfo, wait):
     for y_pos in range(0, client_info.full_height - client_info.window_height, 300):
         scroll_to(driver, 0, y_pos)
-        sleep(wait or 0.2)
+        time.sleep(wait or 0.2)
 
     client_info = get_client_info(driver)
 
